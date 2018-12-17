@@ -468,6 +468,7 @@
                                             parent_id:data.data.list[i].parent_id,
                                             title:data.data.list[i].name,
                                             typeData:data.data.list[i].type-1,
+                                            is_integral:data.data.list[i].is_integral,
                                             children:[],
                                             face: {
                                                 url:data.data.list[i].image,
