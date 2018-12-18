@@ -192,17 +192,17 @@ export const appRouter = [
             //         require(['./views/user/reward.vue'], resolve);
             //     }
             // },
-             {
-                path: 'orders',
-                icon: 'archive',
-                name: 'user_orders',
-                title: '会员订单',
-                mixedRights: true,
-                access: 0,
-                component: resolve => {
-                    require(['./views/user/orders.vue'], resolve);
-                }
-            }, 
+//           {
+//              path: 'orders',
+//              icon: 'archive',
+//              name: 'user_orders',
+//              title: '会员订单',
+//              mixedRights: true,
+//              access: 0,
+//              component: resolve => {
+//                  require(['./views/user/orders.vue'], resolve);
+//              }
+//          }, 
             // {
             //     path: 'cash',
             //     icon: 'social-yen',
@@ -274,7 +274,7 @@ export const appRouter = [
                 path: 'orders',
                 icon: 'archive',
                 name: 'merchant_orders',
-                title: '商户订单管理',
+                title: '商圈订单管理',
                 mixedRights: true,
                 access: 0,
                 component: resolve => {
@@ -473,7 +473,7 @@ export const appRouter = [
             {
                 path: 'Ordermanagement',
                 name: 'Ordermanagement',
-                title: '订单管理',
+                title: '商城订单管理',
                 mixedRights: true,
                 access: 0,
                 component: resolve => {
@@ -484,7 +484,7 @@ export const appRouter = [
             {
                 path: 'OrderWhitemanagement',
                 name: 'OrderWhitemanagement',
-                title: '白积分订单',
+                title: '白积分订单管理',
                 mixedRights: true,
                 access: 1,
                 component: resolve => {

@@ -31,9 +31,9 @@
                             <Select v-model="searchData.payStatus" style="width:140px" placeholder="选择支付状态">
                                 <Option v-for="item,key in payStatus" :value="key" :key="key">{{ item }}</Option>
                             </Select>
-                            <Select v-model="searchData.shipStatus" style="width:140px" placeholder="选择发货状态">
+                            <!--<Select v-model="searchData.shipStatus" style="width:140px" placeholder="选择发货状态">
                                 <Option v-for="item,key in shipStatus" :value="key" :key="key">{{ item }}</Option>
-                            </Select>
+                            </Select>-->
                             <FormItem>
                                  <ButtonGroup>
                                     <Button type="primary" icon="search" @click="search()">搜索</Button>
@@ -133,10 +133,12 @@ export default {
                 {
                     title: '订单编号',
                     // width: "160",
+                    align: 'center',
                     key: 'order_no'
                 },
                 {
                     title: '商户',
+                    align: 'center',
                     key: 'merchant_name',
                     render: (h, params) => {
                         let idText=h('span', {
@@ -151,6 +153,7 @@ export default {
                 {
                     title: '会员',
                     key: 'member_name',
+                    align: 'center',
                     render: (h, params) => {
                         let idText=h('span', {
                                 style: {
@@ -161,17 +164,18 @@ export default {
                         return h('div',[idText,nameText]);
                     }
                 },
-                {
-                    title: '商品',
-                    key: 'product_name',
-                    render: (h, params) => {
-                        let putText=params.row.product_name;
-                        if(params.row.product_pay_type==0)putText="线下购买";
-                        return h('span', {}, putText );
-                    }
-                },
+//              {
+//                  title: '商品',
+//                  key: 'product_name',
+//                  render: (h, params) => {
+//                      let putText=params.row.product_name;
+//                      if(params.row.product_pay_type==0)putText="线下购买";
+//                      return h('span', {}, putText );
+//                  }
+//              },
                 {
                     title: '金额',
+                    align: 'center',
                     key: 'total_score',
                     render: (h, params) => {
                         return h('span', {}, Util.fmoney(Util.numberCarry(params.row.total_score,100,4),6));
@@ -180,15 +184,16 @@ export default {
                 {
                     title: '返现',
                     key: 'cash',
+                    align: 'center',
                     render: (h, params) => {
                         return h('span', {}, Util.fmoney(Util.numberCarry(params.row.cash,100,4),6));
                     }
                 },
-                {
-                    title: '返积分',
-                    // width: "80",
-                    key: 'score'
-                },
+//              {
+//                  title: '返积分',
+//                  // width: "80",
+//                  key: 'score'
+//              },
                 {
                     title: '时间',
                     width: 130,
@@ -197,6 +202,7 @@ export default {
                 },
                 {
                         title: '支付方式',
+                        align: 'center',
                         key: 'payment_method',
                         render:(h, params) => {
 
@@ -229,6 +235,7 @@ export default {
                     },
                 {
                     title: '状态',
+                    align: 'center',
                     key: 'status',
                     // width: "80",
                     align: 'center',
@@ -252,77 +259,77 @@ export default {
 
                     }
                 },
-                {
-                    title: '快递单号',
-                    key: 'express_number',
-                    align: 'center',
-                    // width: "120",
-                    render: (h, params) => {
-                        let tagcolor="default";
-                        let tagText="------";
-                        if(params.row.express_number){
-                           tagText=params.row.express_number;
-                        };
-                        return h('span', {style: {
-                                    color: "#999999"
-                                }}, tagText);
-
-                    }
-                },
-                {
-                    title: '发货状态',
-                    key: 'ship_status',
-                    // width: "80",
-                    align: 'center',
-                    render: (h, params) => {
-
-                        let tagcolor="default";
-                        let tagText="--";
-                        if(params.row.status==2){
-                            let tagText="未处理";
-                            if(params.row.ship_status==2){
-                                tagcolor="green";tagText="已发货";
-                            };
-                            if(params.row.ship_status==1){
-                                tagcolor="red";tagText="待发货";
-                            };
-                            return h('Tag', {
-                                props: {
-                                    color: tagcolor,
-                                    size: 'small'
-                                }
-                            }, tagText);
-                        };
-                        return h('span', {}, tagText);
-
-                    }
-                },
-                {
-                    title: '操作',
-                    key: 'id',
-                    className : "order-col-11",
-                    // width: "9%",
-                    align: 'center',
-                    render: (h, params) => {
-
-                        let settlementButton=h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.showEdit(params.index)
-                                    }
-                                }
-                            }, '发货处理');
-
-                        let dobutton=[];
-
-                        if(params.row.status==2&&this.checkPower("fahuo"))dobutton.push(settlementButton);
-                        return h('div', dobutton);
-                    }
-                }
+//              {
+//                  title: '快递单号',
+//                  key: 'express_number',
+//                  align: 'center',
+//                  // width: "120",
+//                  render: (h, params) => {
+//                      let tagcolor="default";
+//                      let tagText="------";
+//                      if(params.row.express_number){
+//                         tagText=params.row.express_number;
+//                      };
+//                      return h('span', {style: {
+//                                  color: "#999999"
+//                              }}, tagText);
+//
+//                  }
+//              },
+//              {
+//                  title: '发货状态',
+//                  key: 'ship_status',
+//                  // width: "80",
+//                  align: 'center',
+//                  render: (h, params) => {
+//
+//                      let tagcolor="default";
+//                      let tagText="--";
+//                      if(params.row.status==2){
+//                          let tagText="未处理";
+//                          if(params.row.ship_status==2){
+//                              tagcolor="green";tagText="已发货";
+//                          };
+//                          if(params.row.ship_status==1){
+//                              tagcolor="red";tagText="待发货";
+//                          };
+//                          return h('Tag', {
+//                              props: {
+//                                  color: tagcolor,
+//                                  size: 'small'
+//                              }
+//                          }, tagText);
+//                      };
+//                      return h('span', {}, tagText);
+//
+//                  }
+//              },
+//              {
+//                  title: '操作',
+//                  key: 'id',
+//                  className : "order-col-11",
+//                  // width: "9%",
+//                  align: 'center',
+//                  render: (h, params) => {
+//
+//                      let settlementButton=h('Button', {
+//                              props: {
+//                                  type: 'primary',
+//                                  size: 'small'
+//                              },
+//                              on: {
+//                                  click: () => {
+//                                      this.showEdit(params.index)
+//                                  }
+//                              }
+//                          }, '发货处理');
+//
+//                      let dobutton=[];
+//
+//                      if(params.row.status==2&&this.checkPower("fahuo"))dobutton.push(settlementButton);
+//                      return h('div', dobutton);
+//                  }
+//              }
 
             ],
             doType:"list",

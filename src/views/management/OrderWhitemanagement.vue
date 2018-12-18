@@ -26,7 +26,11 @@
                         <FormItem prop="searchDate">
                             <DatePicker type="daterange" v-model="searchData.searchDate" placeholder="请选择时间范围" style="width: 250px"></DatePicker>
                         </FormItem>
-
+                        <FormItem>
+                        	<Select v-model="searchData.order_status" style="width:250px" placeholder="选择订单状态">
+                                <Option v-for="item in shipStatus" :value="item.value">{{ item.name }}</Option>
+                        	</Select>
+                        </FormItem>
                         <FormItem>
                             <ButtonGroup>
                                 <Button type="primary" icon="search" @click="search()">搜索</Button>
@@ -431,12 +435,18 @@
                     "cash":0,
                     "score":0
                 },
+                shipStatus:[
+                	{'value':'1','name':'待支付'},{'value':'2','name':'已支付'},{'value':'3','name':'待发货'},{'value':'4','name':'已发货'},{'value':'5','name':'退款中'},
+                	{'value':'6','name':'已退款'},{'value':'7','name':'已完成'},{'value':'8','name':'待评价'},{'value':'9','name':'取消订单'},{'value':'10','name':'确认收货'},
+               		 {'value':'11','name':'已评价'},{'value':'12','name':'已删除'}
+                ],
                 getLoading: false,
                 searchData:{
                     keyword:"",
                     searchDate:[],
                     startDate:"",
-                    endDate:""
+                    endDate:"",
+                    order_status:""
                 },
                 searchValidata: {},
                 orderDetail:[],
@@ -537,7 +547,8 @@
                     searchDate:[],
                     startDate:"",
                     endDate:"",
-                    type:0
+                    type:0,
+                    order_status:""
                 };
                 this.page.pageNumber=1;
                 this.dataReady+=1;
@@ -553,6 +564,7 @@
                 if(this.searchData.keyword!="")postData.search=Util.trim(this.searchData.keyword);
                 if(this.searchData.startDate!="")postData.startDate=this.searchData.startDate;
                 if(this.searchData.endDate!="")postData.endDate=this.searchData.endDate;
+                if(this.searchData.order_status!="")postData.orderStatus=this.searchData.order_status;
                 $.ajax({
                     url:Config.apiRootPath+Config.api.management.OrderWhitemanagement.list,
                     type: 'POST',

@@ -309,7 +309,7 @@ import Config from '../../config/config';
 import Util from '../../libs/util';
 import Cookies from 'js-cookie';
 import noUpFileInput from '../my_components/upload/noUpFileInput.vue';
-
+import qrCode from 'qrcodejs2';
 export default {
     name: 'merchant_list',
     components: {
@@ -845,6 +845,7 @@ export default {
                 type2:""
             },
             searchValidata: {},
+            ewmCode:{},
             isShowCurrentImage:false,
             viewCurrentImage:""
         };
