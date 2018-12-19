@@ -74,16 +74,26 @@
                                 <Input v-model="currentData.merchantAddress"></Input>
                             </div>
                         </FormItem>
-                        <FormItem label="商户类型：" prop="is_direct">
-                            <RadioGroup v-model="currentData.is_direct" @on-change="switchoverType">
+                        <FormItem label="商户类型：" prop="merchantTypeMerchant">
+                            <RadioGroup v-model="currentData.merchantTypeMerchant" @on-change="switchoverType">
                                 <Radio label="1">
-                                    <span>线上联盟商家</span>
+                                    <span>线下商家(悟空商圈)</span>
                                 </Radio>
                                 <Radio label="2">
-                                    <span>线下联盟商家</span>
+                                    <span>线上商家(悟空商城)</span>
                                 </Radio>
                                 <Radio label="3">
-                                    <span>白积分商家</span>
+                                    <span>白积分商城</span>
+                                </Radio>
+                            </RadioGroup>
+                        </FormItem>
+						<FormItem label="是否直营店：" prop="is_direct">
+                            <RadioGroup v-model="currentData.is_direct">
+                                <Radio label="1">
+                                    <span>直营店</span>
+                                </Radio>
+                                <Radio label="2">
+                                    <span>联盟商家</span>
                                 </Radio>
                             </RadioGroup>
                         </FormItem>
@@ -209,6 +219,7 @@
                             <Button type="default" style="width: 100px;" @click="doWhat('list')">返回列表</Button>
                         </FormItem>
                         <div class="shop-ewm" v-if="currentData.userewm"><a :href="currentData.userewm" target="blank"><img :src="currentData.userewm" /></a><br>点击右键选择图片另存为<br>即可下载二维码</div>
+                        <div id="qrcode"></div>
                     </Form>
                 </div>
                 <div class="ordler-list" v-if="doType=='list'">
@@ -309,7 +320,6 @@ import Config from '../../config/config';
 import Util from '../../libs/util';
 import Cookies from 'js-cookie';
 import noUpFileInput from '../my_components/upload/noUpFileInput.vue';
-import qrCode from 'qrcodejs2';
 export default {
     name: 'merchant_list',
     components: {
@@ -327,9 +337,16 @@ export default {
             if (value>0) {
                 callback();
             } else {
+                callback(new Error('请选择店铺类型'));
+            }
+        };     
+        const valideMerTypeM = (rule, value, callback) => {
+            if (value>0) {
+                callback();
+            } else {
                 callback(new Error('请选择商户类型'));
             }
-        };        
+        };  
         const validRatio = (rule, value, callback) => {
             if (value>=0&&value<100) {
                 callback();
@@ -812,6 +829,9 @@ export default {
                     is_direct: [
                     	{ required: true,validator: valideMerType,trigger: 'change' }
                     ],
+                    merchantTypeMerchant: [
+                    	{ required: true,validator: valideMerTypeM,trigger: 'change' }
+                    ],
                 userPassword: [
                     { min: 6, message: '请至少输入6个字符', trigger: 'blur' },
                     { max: 32, message: '最多输入32个字符', trigger: 'blur' }
@@ -944,7 +964,7 @@ export default {
             this.setDistrict(this.currentData.merchantCityId,true);
             this.getListType(this.currentData.merchantTypeMerchant);
             this.doType="edit";
-            if(this.currentData.is_direct==2){
+            if(this.currentData.merchantTypeMerchant==1){
             	this.showTypeOff=true;
             }else{
             	this.showTypeOn=true;
@@ -973,7 +993,7 @@ export default {
             this.search();
         },
         switchoverType (){
-        	 if(this.currentData.is_direct==2){
+        	 if(this.currentData.merchantTypeMerchant==1){
             	this.showTypeOff=true;
             	this.showTypeOn=false;
            }else{
@@ -1242,6 +1262,7 @@ export default {
                     formDataSe.append("merchantDistrict",this.currentData.merchantDistrictId);
                     formDataSe.append("merchantAddress",this.currentData.merchantAddress);
                     formDataSe.append("is_direct",this.currentData.is_direct);
+                    formDataSe.append("merchantTypeMerchant",this.currentData.merchantTypeMerchant);
                     formDataSe.append("merchantType",this.currentData.merchantType);
                     formDataSe.append("merchantBusinessM", this.currentData.merchantBusinessM);
                     formDataSe.append("merchantBusinessDirector",this.currentData.merchantBusinessDirector);
