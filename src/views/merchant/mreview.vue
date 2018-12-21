@@ -68,19 +68,30 @@
                                 <Input v-model="currentData.merchantAddress" readonly></Input>
                             </div>
                         </FormItem>
-                        <FormItem label="商户类型：">
-                            <RadioGroup v-model="currentData.is_direct" @on-change="switchoverType">
-                                <Radio label="1">
-                                    <span>线上联盟商家</span>
+                        <FormItem label="商户类型：" prop="merchantTypeMerchant">
+                            <RadioGroup v-model="currentData.merchantTypeMerchant" @on-change="switchoverType">
+                                <Radio :label="1">
+                                    <span>线下商家(悟空商圈)</span>
                                 </Radio>
-                                <Radio label="2">
-                                    <span>线下联盟商家</span>
+                                <Radio :label="2">
+                                    <span>线上商家(悟空商城)</span>
                                 </Radio>
-                                <Radio label="3">
-                                    <span>白积分商家</span>
+                                <Radio :label="3">
+                                    <span>白积分商城</span>
                                 </Radio>
                             </RadioGroup>
                         </FormItem>
+						<FormItem label="是否直营店：" prop="is_direct">
+                            <RadioGroup v-model="currentData.is_direct">
+                                <Radio :label="1">
+                                    <span>直营店</span>
+                                </Radio>
+                                <Radio :label="2">
+                                    <span>联盟商家</span>
+                                </Radio>
+                            </RadioGroup>
+                        </FormItem>
+
                         <FormItem label="所属行业：" v-if="showTypeOff">
                             <div style="display:inline-block;width:140px;">
                                 <Select v-model="currentData.merchantType">
@@ -288,8 +299,6 @@
 import Config from '../../config/config';
 import Util from '../../libs/util';
 import Cookies from 'js-cookie';
-
-
 export default {
     name: 'merchant_list',
     data () {
@@ -297,7 +306,7 @@ export default {
             if (value>0) {
                 callback();
             } else {
-                callback(new Error('请选择商户折扣差'));
+                callback(new Error('请选择商户类型'));
             }
         };
         const validRatio = (rule, value, callback) => {
@@ -727,7 +736,7 @@ export default {
             this.setDistrict(this.currentData.merchantCityId,true);
             this.getListType(this.currentData.merchantTypeMerchant);
             this.doType="edit";
-            if(this.currentData.is_direct==2){
+            if(this.currentData.merchantTypeMerchant==1){
             	this.showTypeOff=true;
             }else{
             	this.showTypeOn=true;
@@ -756,7 +765,7 @@ export default {
             this.search();
         },
         switchoverType (){
-        	 if(this.currentData.is_direct==2){
+        	 if(this.currentData.merchantTypeMerchant==1){
             	this.showTypeOff=true;
             	this.showTypeOn=false;
            }else{

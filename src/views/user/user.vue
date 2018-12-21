@@ -104,18 +104,8 @@
                     <tr><td class="item-title">是否股东</td><td class="item-content">{{is_shareholder[currentData.is_shareholder]}}</td></tr>
                     <tr><td class="item-title">推荐人</td><td class="item-content">{{currentData.share_member_name}} [ {{currentData.share_member_real_name}} ]</td></tr>
                     <tr><td class="item-title">创建时间</td><td class="item-content">{{currentData.created}}</td></tr>
-                    <tr><td class="item-title">每月返还金额上限</td><td class="item-content">{{currentData.amount_max}}</td></tr>
-                    <tr><td class="item-title">可提现余额</td><td class="item-content">{{currentData.amount_score}}</td></tr>
-                    <tr><td class="item-title">共享分余额</td><td class="item-content">{{currentData.shopping_score}}</td></tr>
+                    <tr><td class="item-title">消费券额度</td><td class="item-content">{{currentData.amount_max}}</td></tr>
                     <tr><td class="item-title">身份证</td><td class="item-content">{{currentData.id_card}}</td></tr>
-                    <tr><td class="item-title">云联惠账号</td><td class="item-content">
-                        <template v-if="currentData.yun_account_status==1">
-                            {{currentData.yun_account}}
-                        </template>
-                        <template v-else>
-                            <font color="#999">未绑定</font>
-                        </template>
-                </td></tr>
                 </table>
                 <div slot="footer">
                     <Button type="primary" @click="closeView">关闭</Button>
@@ -378,18 +368,22 @@ export default {
                 },
                 {
                     title: '用户名',
+                    align: 'center',
                     key: 'name'
                 },
                 {
                     title: '注册日期',
+                    align: 'center',
                     key: 'created'
                 },
                 {
                     title: '手机号',
+                    align: 'center',
                     key: 'mobile'
                 },
                 {
                     title: '分享人',
+                    align: 'center',
                     key: 'share_member_name'
 
                 },
@@ -420,16 +414,32 @@ export default {
                     }
                 },
                 {
-                    title: '是否股东',
-                    width:100,
-                    key: 'is_shareholder',
+                    title: '所属商户',
+                    key: 'merchant_name',
                     align: 'center',
                     render: (h, params) => {
                         let tagcolor="default";
-                        let tagText="";
-                        return h('span', {}, this.is_shareholder[params.row.is_shareholder]);
+                        let tagText="无";
+                        let style={color:"#a0a0a0"};
+
+                        if(params.row.merchant_name){
+                            tagText=params.row.merchant_name;
+                            style={color:"#33f"};
+                        };
+                        return h('span', {style}, tagText);
                     }
                 },
+//              {
+//                  title: '是否股东',
+//                  width:100,
+//                  key: 'is_shareholder',
+//                  align: 'center',
+//                  render: (h, params) => {
+//                      let tagcolor="default";
+//                      let tagText="";
+//                      return h('span', {}, this.is_shareholder[params.row.is_shareholder]);
+//                  }
+//              },
                 {
                     title: '用户等级',
                     key: 'level',

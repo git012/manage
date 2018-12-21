@@ -46,28 +46,56 @@
                     </div>
                 </div>
             </div>
-            <Modal v-model="updateStatus" :closable='false' :mask-closable=false :width="500">
+            <Modal v-model="updateStatus" :closable='false' :mask-closable=false :width="1000">
                 <h3 slot="header" style="color:#2D8CF0">会员实名认证</h3>
                 <Form ref="updateStatusForm" :model="updateStatusForm" :label-width="150" label-position="right" :rules="updateStatusValidate">
-                    
-                    <FormItem label="会员帐号：" style="margin-bottom:0px">
-                        {{updateStatusForm.user_name}}
+                    <FormItem label="会员帐号：" style="margin-bottom:5px">
+                         	<div style="width:150px;">
+                                <Input v-model="updateStatusForm.user_name" readonly="readonly"></Input>
+                            </div>
                     </FormItem>
-                    <FormItem label="姓名：" style="margin-bottom:0px">
-                        {{updateStatusForm.name}}
+                    <FormItem label="姓名：" style="margin-bottom:5px">
+                         	<div style="width:150px;">
+                                <Input v-model="updateStatusForm.name"></Input>
+                            </div>
                     </FormItem>
-                    <FormItem label="性别：" style="margin-bottom:0px">
-                        {{updateStatusForm.sex}}
+                    <FormItem label="性别：" style="margin-bottom:5px" prop="is_direct">
+                            <RadioGroup v-model="updateStatusForm.sex">
+                                <Radio :label="1">
+                                    <span>男</span>
+                                </Radio>
+                                <Radio :label="2">
+                                    <span>女</span>
+                                </Radio>
+                            </RadioGroup>
                     </FormItem>
-                    <FormItem label="身份证号码：" style="margin-bottom:0px">
-                        {{updateStatusForm.id_card}}
+                    <FormItem label="身份证号码：" style="margin-bottom:5px">
+                         	<div style="width:150px;">
+                                <Input v-model="updateStatusForm.id_card"></Input>
+                            </div>
                     </FormItem>
-                    <FormItem label="电话：" style="margin-bottom:0px">
-                        {{updateStatusForm.mobile}}
+                    <FormItem label="电话：" style="margin-bottom:5px">
+                         	<div style="width:150px;">
+                                <Input v-model="updateStatusForm.mobile"></Input>
+                            </div>
                     </FormItem>
-                    <FormItem label="地区：" style="margin-bottom:0px">
-                        {{updateStatusForm.province_name}}{{updateStatusForm.city_name}}{{updateStatusForm.district_name}}
-                    </FormItem>
+                    <FormItem label="地区：" prop="merchantProvinceId" style="margin-bottom:5px">
+                            <div style="display:inline-block;width:140px;">
+                                <Select v-model="updateStatusForm.province_id" placeholder="请选择省份" @on-change="setCity">
+                                    <Option v-if="item" v-for="item in areaData.province" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                                </Select>
+                            </div>
+                            <div style="display:inline-block;width:140px;">
+                                <Select v-if="areaData.citys.length&&updateStatusForm.province_id" placeholder="请选择城市" v-model="updateStatusForm.city_id" @on-change="setDistrict">
+                                    <Option v-if="item" v-for="item in areaData.citys" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                                </Select>
+                            </div>
+                            <div style="display:inline-block;width:140px;">
+                                <Select v-if="areaData.district.length&&updateStatusForm.city_id" placeholder="请选择区县" v-model="updateStatusForm.district_id">
+                                    <Option v-if="item" v-for="item in areaData.district" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                                </Select>
+                            </div>
+                        </FormItem>
                     <FormItem label="地址：" style="margin-bottom:0px">
                         {{updateStatusForm.address}}
                     </FormItem>
@@ -173,13 +201,13 @@ export default {
                         let tagcolor="default";
                         let tagText="未审核";
                         if(params.row.authentication_status==1){
-                            tagcolor="green";tagText="认证";
+                            tagcolor="green";tagText="认证通过";
                         };
                         if(params.row.authentication_status==0){
                             tagcolor="default";tagText="未认证";
                         };
                         if(params.row.authentication_status==2){
-                            tagcolor="default";tagText="认证拒绝";
+                            tagcolor="default";tagText="认证失败";
                         };
                         return h('Tag', {
                                 props: {
@@ -206,10 +234,10 @@ export default {
                                         this.doWhat("authentication",params.index)
                                     }
                                 }
-                            }, '审核');
+                            }, '编辑/审核');
 
                         let dobutton=[];
-                        if(this.checkPower("authentication")&&params.row.authentication_status==0){
+                        if(this.checkPower("authentication")){
                             dobutton.push(deleteButton);
                         };
                         return h('div', dobutton);
@@ -401,13 +429,6 @@ export default {
                         
                         this.page.pageCount=Math.ceil(this.page.dataCount/this.page.pageSize);
                         //format list data
-                        for (var i = 0; i<data.data.list.length;i++) {
-                            if(data.data.list[i].sex==1){
-                            data.data.list[i].sex="男";
-                        }else{
-                            data.data.list[i].sex="女";
-                        }
-                        }
                         this.tableData=data.data.list;
                     }else{
                         Config.showError({vm:this,data:data,
@@ -470,6 +491,7 @@ export default {
 
         },
         setProvince () {
+        	console.log('省')
             $.ajax({
                 url: Config.apiRootPath+Config.api.public.getProvince,
                 type: 'POST',
@@ -492,6 +514,7 @@ export default {
             });
         },
         setCity (provinceId,dataReset) {
+        	console.log('市')
             if(!provinceId)return;
             if(!dataReset){
                 this.currentData.merchantCityId="";
@@ -522,6 +545,7 @@ export default {
             });
         },
         setDistrict (cityId,dataReset) {
+        	console.log('区')
             if(!cityId)return;
             this.areaData.district=[];
             if(!dataReset){
@@ -626,6 +650,8 @@ export default {
         changeStatus (index) {
             this.updateStatusForm=$.extend(true, {}, this.tableData[index]);
             this.updateStatusForm.tableIndex=index;
+            this.setCity(this.updateStatusForm.province_id,true);
+            this.setDistrict(this.updateStatusForm.city_id,true);
             this.updateStatus = true;
         },
         cancelUpdateStatus () {

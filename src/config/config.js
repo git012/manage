@@ -1,9 +1,9 @@
 ﻿import Env from './env';
 import Md5 from '../libs/md5';
 // 测试环境
-//     const server_route = "http://tapi.yugoubao.net/index.php?s=";
+       const server_route = "http://tapi.yugoubao.net/index.php?s=";
 //生产环境
-const server_route = "https://wktapi.yugoubao.net/index.php?s=";
+//const server_route = "https://wktapi.yugoubao.net/index.php?s=";
 const powerList = {};
 let config = {
     powerList:powerList,
@@ -371,7 +371,7 @@ let config = {
                 "edit": "wkmanager/news/edit", //login.vue
                 "add": "wkmanager/news/add", //login.vue
                 "delete": "wkmanager/news/delete",
-                "review": "http://47.104.18.63:8089/apph5/?type=news&id="
+                "review": "http://47.104.18.63:8089/app/api/article/?type=news&id="
             }
         },
         //限额管理amountMax.listamountMax

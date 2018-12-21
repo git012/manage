@@ -129,30 +129,35 @@
                     },
                     {
                         title: '商户名称',
+                        align: 'center',
                         // width: "130",
                         key: 'merchant_name'
                     },
                     {
-                        title: '商户联系人',
+                        title: '商户法人',
+                        align: 'center',
                         // width: "130",
                         key: 'merchant_connection_name'
                     },
                     {
                         title: '开户名',
+                        align: 'center',
                         // width: "130",
                         key: 'username'
                     },
                     {
                         title: '银行名称',
+                        align: 'center',
                         key: 'bank_name'
                     },
                     {
                         title: '银行卡卡号',
+                        align: 'center',
                         key: 'bank_number'
                     },
                     {
                         title: '金额',
-                        align: 'right',
+                        align: 'center',
                         key: 'total',
                         render: (h, params) => {
                             return h('span', {}, Util.fmoney(Util.numberCarry(params.row.total,100,4),6));

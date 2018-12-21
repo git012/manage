@@ -5,7 +5,7 @@ export const loginRouter = {
     path: '/login',
     name: 'login',
     meta: {
-        title: '登录-预购宝管理平台'
+        title: '登录-悟空团管理平台'
     },
     component: resolve => {
         require(['./views/login.vue'], resolve);
@@ -258,7 +258,6 @@ export const appRouter = [
         access: 0,
         component: Main,
         children: [
-
             {
                 path: 'list',
                 icon: 'android-clipboard',
@@ -314,7 +313,6 @@ export const appRouter = [
                 }
             },
             {
-            
                 path: 'mreview',
                 icon: 'clipboard',
                 name: 'mreview',
@@ -324,7 +322,7 @@ export const appRouter = [
                 component: resolve => {
                     require(['./views/merchant/mreview.vue'], resolve);
                 }
-            },            
+            }, 
             // {
             //     path: 'jfintegral',
             //     icon: 'social-usd',
@@ -339,84 +337,7 @@ export const appRouter = [
 
         ]
     },
-    {
-        path: '/agents',
-        icon: 'trophy',
-        name: 'agents',
-        title: '代理商管理',
-        mixedRights: true,
-        access: 0,
-        component: Main,
-        children: [
-            {
-                path: 'list',
-                icon: 'compose',
-                name: 'agents_list',
-                title: '代理商信息管理',
-                mixedRights: true,
-                access: 0,
-                component: resolve => {
-                    require(['./views/agents/agents.vue'], resolve);
-                }
-            },
-            //  {
-            //     path: 'settlement',
-            //     icon: 'clipboard',
-            //     name: 'agents_settlement',
-            //     title: '代理商结算对账',
-            //     mixedRights: true,
-            //     access: 0,
-            //     component: resolve => {
-            //         require(['./views/agents/settlement.vue'], resolve);
-            //     }
-            // },
-             {
-                path: 'account',
-                icon: 'clipboard',
-                name: 'agents_settlements',
-                title: '结算中心',
-                mixedRights: false,
-                access: 1,
-                component: resolve => {
-                    require(['./views/agents/account.vue'], resolve);
-                }
-            },
-             {
-                path: 'deposit',
-                icon: 'clipboard',
-                name: 'deposit',
-                title: '代理商提现管理',
-                mixedRights: false,
-                access: 1,
-                component: resolve => {
-                    require(['./views/agents/deposit.vue'], resolve);
-                }
-            },  
-            {
-                path: 'agentAudit',
-                icon: 'clipboard',
-                name: 'agentAudit',
-                title: '代理商申请审核',
-                mixedRights: false,
-                access: 1,
-                component: resolve => {
-                    require(['./views/agents/agentAudit.vue'], resolve);
-                }
-            },  
-            // ,{
-            //     path: 'cash',
-            //     icon: 'android-clipboard',
-            //     name: 'agents_QRCode',
-            //     title: '代理商二维码管理',
-            //     mixedRights: false,
-            //     access: 1,
-            //     component: resolve => {
-            //         require(['./views/agents/QRCode.vue'], resolve);
-            //     }
-            // }
-        ]
-    },
-    // 商城管理
+        // 商城管理
     {
         path: '/management',
         icon: 'ios-cart',
@@ -503,6 +424,84 @@ export const appRouter = [
             }
         ]
     },
+    {
+        path: '/agents',
+        icon: 'trophy',
+        name: 'agents',
+        title: '代理商管理',
+        mixedRights: true,
+        access: 0,
+        component: Main,
+        children: [
+            {
+                path: 'list',
+                icon: 'compose',
+                name: 'agents_list',
+                title: '代理商信息管理',
+                mixedRights: true,
+                access: 0,
+                component: resolve => {
+                    require(['./views/agents/agents.vue'], resolve);
+                }
+            },
+            //  {
+            //     path: 'settlement',
+            //     icon: 'clipboard',
+            //     name: 'agents_settlement',
+            //     title: '代理商结算对账',
+            //     mixedRights: true,
+            //     access: 0,
+            //     component: resolve => {
+            //         require(['./views/agents/settlement.vue'], resolve);
+            //     }
+            // },
+             {
+                path: 'account',
+                icon: 'clipboard',
+                name: 'agents_settlements',
+                title: '结算中心',
+                mixedRights: false,
+                access: 1,
+                component: resolve => {
+                    require(['./views/agents/account.vue'], resolve);
+                }
+            },
+             {
+                path: 'deposit',
+                icon: 'clipboard',
+                name: 'deposit',
+                title: '代理商提现管理',
+                mixedRights: false,
+                access: 1,
+                component: resolve => {
+                    require(['./views/agents/deposit.vue'], resolve);
+                }
+            },  
+            {
+                path: 'agentAudit',
+                icon: 'clipboard',
+                name: 'agentAudit',
+                title: '代理商申请审核',
+                mixedRights: false,
+                access: 1,
+                component: resolve => {
+                    require(['./views/agents/agentAudit.vue'], resolve);
+                }
+            },  
+            // ,{
+            //     path: 'cash',
+            //     icon: 'android-clipboard',
+            //     name: 'agents_QRCode',
+            //     title: '代理商二维码管理',
+            //     mixedRights: false,
+            //     access: 1,
+            //     component: resolve => {
+            //         require(['./views/agents/QRCode.vue'], resolve);
+            //     }
+            // }
+        ]
+    },
+
     // 资讯管理
     {
         path: '/news',
@@ -537,17 +536,17 @@ export const appRouter = [
         access: 1,
         component: Main,
         children: [
-            {
-                path: 'listamountMax',
-                icon: 'settings',
-                name: 'listamountMax',
-                title: '企业会员申请',
-                mixedRights: false,
-                access: 1,
-                component: resolve => {
-                    require(['./views/amountMax/listamountMax.vue'], resolve);
-                }
-            },
+//          {
+//              path: 'listamountMax',
+//              icon: 'settings',
+//              name: 'listamountMax',
+//              title: '企业会员申请',
+//              mixedRights: false,
+//              access: 1,
+//              component: resolve => {
+//                  require(['./views/amountMax/listamountMax.vue'], resolve);
+//              }
+//          },
              {
                 path: 'listamountMaxUser',
                 icon: 'clipboard',

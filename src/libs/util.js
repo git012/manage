@@ -106,7 +106,7 @@ util.formatImageUrl = function (imageUrl) {
 };
 
 util.title = function (title) {
-    title = title || '预购宝管理后台';
+    title = title || '悟空团管理后台';
     window.document.title = title;
 };
 

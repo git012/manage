@@ -6,8 +6,8 @@
     .doBox{ position:relative}
     .small_table .ivu-table-cell{ padding-left:8px; padding-right: 8px}
     .small_table table th{ text-align:center}
-    .shop-ewm{ position: absolute; right:0px; top:0px;width:180px; text-align: center;font-size:12px}
-    .shop-ewm img{width:180px; height: auto; border:1px solid #dededf}
+    .shopshow{ position: absolute; right:0px; top:0px;width:180px; text-align: center;font-size:12px;z-index:999;display: block;}
+    /*.shop-ewm img{width:180px; height: auto; border:1px solid #dededf}*/
 </style>
 <template>
     <div>
@@ -76,23 +76,23 @@
                         </FormItem>
                         <FormItem label="商户类型：" prop="merchantTypeMerchant">
                             <RadioGroup v-model="currentData.merchantTypeMerchant" @on-change="switchoverType">
-                                <Radio label="1">
+                                <Radio :label="1">
                                     <span>线下商家(悟空商圈)</span>
                                 </Radio>
-                                <Radio label="2">
+                                <Radio :label="2">
                                     <span>线上商家(悟空商城)</span>
                                 </Radio>
-                                <Radio label="3">
+                                <Radio :label="3">
                                     <span>白积分商城</span>
                                 </Radio>
                             </RadioGroup>
                         </FormItem>
 						<FormItem label="是否直营店：" prop="is_direct">
                             <RadioGroup v-model="currentData.is_direct">
-                                <Radio label="1">
+                                <Radio :label="1">
                                     <span>直营店</span>
                                 </Radio>
-                                <Radio label="2">
+                                <Radio :label="2">
                                     <span>联盟商家</span>
                                 </Radio>
                             </RadioGroup>
@@ -218,9 +218,13 @@
                             <Button type="primary" style="width: 100px;margin-right:10px" @click="saveEdit">保存</Button>
                             <Button type="default" style="width: 100px;" @click="doWhat('list')">返回列表</Button>
                         </FormItem>
-                        <div class="shop-ewm" v-if="currentData.userewm"><a :href="currentData.userewm" target="blank"><img :src="currentData.userewm" /></a><br>点击右键选择图片另存为<br>即可下载二维码</div>
-                        <div id="qrcode"></div>
                     </Form>
+                   	<template>
+                 		<div class="shopshow">
+                 			<div id="qrcode" ref="qrcode"></div>
+            				<div><br>点击右键选择图片另存为<br>即可下载二维码</div>
+                 		</div>
+            		</template>
                 </div>
                 <div class="ordler-list" v-if="doType=='list'">
                     <div class="search-box">
@@ -320,10 +324,12 @@ import Config from '../../config/config';
 import Util from '../../libs/util';
 import Cookies from 'js-cookie';
 import noUpFileInput from '../my_components/upload/noUpFileInput.vue';
+import QRCode from 'qrcodejs2';
 export default {
     name: 'merchant_list',
     components: {
-        noUpFileInput
+        noUpFileInput,
+        QRCode
     },
     data () {
         const valideMerchantType = (rule, value, callback) => {
@@ -435,28 +441,34 @@ export default {
                 },
                 {
                     title: '帐号',
+                    align: 'center',
                     key: 'userName'
                 },
                 {
                     title: '商户名称',
+                    align: 'center',
                     key: 'merchantName'
                 },
                 {
                     title:'商户面积',
+                    align: 'center',
                     key:'operating_area',
                 },
                 {
                     title: '联系人',
                     // width: "6%",
+                    align: 'center',
                     key: 'applicantName'
                 },
                 {
                     title: '商户电话',
+                    align: 'center',
                     // width: "94",
                     key: 'merchantPhone'
                 },
                 {
                     title: '地区',
+                    align: 'center',
                     key: 'merchantProvinceId',
                     render: (h, params) => {
                         let tagText=params.row.merchantProvinceName+params.row.merchantCityName+params.row.merchantDistrictName;
@@ -478,63 +490,20 @@ export default {
                 {
                     title: '白积分商品折扣差',
                     align: 'center',
-                    width: "120",
                     key: 'merchantWhitePointDiscount',
                     render: (h, params) => {
                            let tagText=params.row.merchantWhitePointDiscount*100+"%";
                            return h('span', {}, tagText);
-                       }
-                    
-                }
-                ,
+                      }
+                },
                 {
                     title: '商户折扣差',
                     align: 'center',
-                    width: "100",
                     key: 'merchantRatio',
                     render: (h, params) => {
                            let tagText=params.row.merchantRatio*100+"%";
                            return h('span', {}, tagText);
                        }
-                },
-                // {
-                //     title: '商户类型',
-                //     key: 'merchantType',
-                //     // width: "66",
-                //     align: 'center',
-                //     render: (h, params) => {
-                //         let tagcolor="default";
-                //         let tagText="";
-                //
-                //         $.each(this.merchantTypeData,(small_index, small_el)=>{
-                //             if(params.row.merchantType==small_el.value)tagText=small_el.label
-                //         })
-                //         return h('span', {}, tagText);
-                //     }
-                // },
-                {
-                    title: '状态',
-                    key: 'applicantStatus',
-                    // width: "80",
-                    align: 'center',
-                    render: (h, params) => {
-
-                        let tagcolor="default";
-                        let tagText="审核中";
-                        if(params.row.applicantStatus==1){
-                            tagcolor="green";tagText="已通过";
-                        };
-                        if(params.row.applicantStatus==2){
-                            tagcolor="red";tagText="已拒绝";
-                        };
-                        return h('Tag', {
-                                props: {
-                                    color: tagcolor,
-                                    size: 'small'
-                                }
-                            }, tagText);
-
-                    }
                 },
                 {
                     title: '操作',
@@ -542,20 +511,6 @@ export default {
                     width: 110,
                     align: 'center',
                     render: (h, params) => {
-                        // let viewButton=h('Button', {
-                        //         props: {
-                        //             type: 'primary',
-                        //             size: 'small'
-                        //         },
-                        //         style: {
-                        //             marginRight: '5px'
-                        //         },
-                        //         on: {
-                        //             click: () => {
-                        //                 this.view(params.index)
-                        //             }
-                        //         }
-                        //     }, '详情');
                         let editButton=h('Button', {
                                 props: {
                                     type: 'primary',
@@ -581,16 +536,13 @@ export default {
                                     }
                                 }
                             }, '审核');
-
                         let dobutton=[];
-
                         if(this.checkPower("edit")){
                             dobutton.push(editButton);
                         };
                         if(this.checkPower("review")){
                             dobutton.push(deleteButton);
                         };
-
                         return h('div', dobutton);
                     }
                 }
@@ -679,8 +631,6 @@ export default {
                 merchantYgbAccount:"",
                 merchantPasswd:"",
                 merchantConfirmPasswd:"",
-                // merchantIsBoutique:0,
-                merchantTypeMerchant:0,
                 merchantBoutiqueSort:"",
                 userewm:"",
                 face: {
@@ -865,7 +815,7 @@ export default {
                 type2:""
             },
             searchValidata: {},
-            ewmCode:{},
+            ewmCode:"",
             isShowCurrentImage:false,
             viewCurrentImage:""
         };
@@ -931,6 +881,13 @@ export default {
         	this.showTypeOff=false;
         	this.showTypeOn=false;        	
             this.currentData=$.extend(true, {}, this.tableData[index]);
+            console.log(this.currentData);
+            var jsonStr = JSON.stringify(this.currentData.code);
+            this.ewmCode=jsonStr;
+            console.log(this.ewmCode);
+           	this.$nextTick (function () {
+   					this.qrcode();
+				})
             this.currentData.face={
                                         url:this.currentData.applicantIdCardImage,
                                         file:"",
@@ -1013,6 +970,13 @@ export default {
             this.page.pageNumber=1;
             this.init();
         },
+        qrcode () {
+				let qrcode = new QRCode('qrcode', {  
+      			width: 180,  // 设置宽度 
+      			height:180, // 设置高度
+      			text:this.ewmCode
+			})  
+			},
         search (pageNumber) {
             if(this.searchData.searchDate.length){
                 this.searchData.startDate=Util.FormatDate(this.searchData.searchDate[0],"yyyy-MM-dd");
