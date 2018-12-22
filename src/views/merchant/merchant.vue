@@ -881,10 +881,8 @@ export default {
         	this.showTypeOff=false;
         	this.showTypeOn=false;        	
             this.currentData=$.extend(true, {}, this.tableData[index]);
-            console.log(this.currentData);
             var jsonStr = JSON.stringify(this.currentData.code);
             this.ewmCode=jsonStr;
-            console.log(this.ewmCode);
            	this.$nextTick (function () {
    					this.qrcode();
 				})

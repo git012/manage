@@ -31,6 +31,9 @@
                                     <Icon type="ios-eye" slot="prepend"></Icon>
                                 </Input>
                             </FormItem>
+                            <Select v-model="searchData.type" style="width:150px" placeholder="请选择审核状态">
+                                <Option v-for="item in recordStatus" :value="item.value">{{ item.name }}</Option>
+                            </Select>
                             <FormItem>
                                 <ButtonGroup>
                                     <Button type="primary" icon="search" @click="search()">搜索</Button>
@@ -46,8 +49,7 @@
                     </div>
                 </div>
             </div>
-            <Modal v-model="updateStatus" :closable='false' :mask-closable=false :width="1000">
-                <h3 slot="header" style="color:#2D8CF0">会员实名认证</h3>
+        <div v-if="updateStatus">
                 <Form ref="updateStatusForm" :model="updateStatusForm" :label-width="150" label-position="right" :rules="updateStatusValidate">
                     <FormItem label="会员帐号：" style="margin-bottom:5px">
                          	<div style="width:150px;">
@@ -95,21 +97,21 @@
                                     <Option v-if="item" v-for="item in areaData.district" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                 </Select>
                             </div>
-                        </FormItem>
-                    <FormItem label="地址：" style="margin-bottom:0px">
-                        {{updateStatusForm.address}}
+                       </FormItem>
+                    <FormItem label="地址：" style="margin-bottom:5px">
+                         	<div style="width:150px;">
+                                <Input v-model="updateStatusForm.address"></Input>
+                            </div>
                     </FormItem>
-
-                    <FormItem label="身份证正面照片：" style="margin-bottom:0px">
-                        <img class="viewImg" @click="viewImage(updateStatusForm.front_image,updateStatusForm.id_card)" height="60" :src="updateStatusForm.front_image" />
+                    <FormItem label="身份证正面照：">
+                            <noUpFileInput :fileInfro="updateStatusForm.face"></noUpFileInput>
                     </FormItem>
-                    <FormItem label="身份证背面照片：" style="margin-bottom:0px">
-                        <img class="viewImg" @click="viewImage(updateStatusForm.reverse_image,updateStatusForm.id_card)" height="60" :src="updateStatusForm.reverse_image" />
-                    </FormItem>
-                    <FormItem label="身份证手持照片：" style="margin-bottom:0px">
-                        <img class="viewImg" @click="viewImage(updateStatusForm.image,updateStatusForm.id_card)" height="60" :src="updateStatusForm.image" />
-                    </FormItem>
-                    
+                   <FormItem label="身份证正面照：">
+                            <noUpFileInput :fileInfro="updateStatusForm.face2"></noUpFileInput>
+                    </FormItem>    
+                    <FormItem label="身份证手持照片：">
+                            <noUpFileInput :fileInfro="updateStatusForm.face3"></noUpFileInput>
+                    </FormItem> 
                     <FormItem label="审核状态：" prop="is_authentication">
                         <RadioGroup v-model="updateStatusForm.is_authentication">
                             <Radio label="2">
@@ -121,11 +123,11 @@
                         </RadioGroup>
                     </FormItem>
                 </Form>
-                <div slot="footer">
-                    <Button type="text" @click="cancelUpdateStatus">取消</Button>
+                <div slot="footer" style="margin-left: 50px;">
+                    <Button type="default" @click="cancelUpdateStatus">取消</Button>
                     <Button type="primary" :loading="saveUpdateStatusLoading" @click="saveUpdateStatus">保存</Button>
                 </div>
-            </Modal>
+        </div>
             <Modal v-model="isShowCurrentImage" :width="600">
                 <h3 slot="header" style="color:#2D8CF0">{{viewCurrentImage_card}}</h3>
                 <div align="center">
@@ -143,10 +145,13 @@
 import Config from '../../config/config';
 import Util from '../../libs/util';
 import Cookies from 'js-cookie';
-
+import noUpFileInput from '../my_components/upload/noUpFileInput.vue';
 
 export default {
     name: 'real_name_authentication',
+    components: {
+        noUpFileInput
+    },
     data () {
         const validStatus = (rule, value, callback) => {
 
@@ -167,22 +172,27 @@ export default {
                 },
                 {
                     title: '帐号',
+                    align: 'center',
                     key: 'user_name'
                 },
                 {
                     title: '姓名',
+                    align: 'center',
                     key: 'name'
                 },
                  {
                     title: '性别',
+                    align: 'center',
                     key: 'sex'
                 },
                 {
                     title: '身份证号',
+                    align: 'center',
                     key: 'id_card'
                 },
                 {
                     title: '手机',
+                    align: 'center',
                     key: 'mobile'
                 },
                 {
@@ -249,6 +259,7 @@ export default {
             switching:false,
             tableData: [],
             merchantTypeData: [],
+            recordStatus:[{"value":"0","name":"未认证"},{"value":"1","name":"认证通过"},{"value":"2","name":"认证失败"}],
             areaData:{
                 areaDataReady:3,
                 province:[],
@@ -282,7 +293,7 @@ export default {
                 "image": "",
                 "is_authentication": 0,
                 "user_name":"",
-                "mobile":""
+                "mobile":"",
             },
             updateStatusForm: {},
             updateStatusValidate: {
@@ -298,7 +309,7 @@ export default {
                 searchDate:[],
                 startDate:"",
                 endDate:"",
-                type:0
+                type:""
             },
             searchValidata: {},
             isShowCurrentImage:false,
@@ -314,7 +325,12 @@ export default {
             return !(this.areaData.areaDataReady==0);
         },
         doName () {
-            return "待实名认证用户列表";
+        	if(this.doType=='list'){
+        		 return "待实名认证用户列表";
+        	}else{
+        		return "编辑/审核用户实名认证";
+        	}
+           
         },
         currentDataValidate () {
             if(this.doType=="add")return this.addDataValidate;
@@ -336,6 +352,7 @@ export default {
             }
             this.switching=true;
             if(dotype=="authentication"){
+            	this.doType="Rlist";
                 this.changeStatus(dataIndex);
             };
             if(dotype=="list"){
@@ -343,6 +360,7 @@ export default {
                 this.dataReady+=2;
                 this.init();
                 this.doType="list";
+                this.updateStatus=false;
             };
             this.switching=false;
         },
@@ -369,7 +387,7 @@ export default {
             this.isShowCurrentImage=false;
         },
         resetCurrentData () {
-            this.currentData = $.extend(true, {}, this.defaultData);
+            this.updateStatusForm = $.extend(true, {}, this.defaultData);
         },
         changePage (pageNumber){
             this.page.pageNumber=pageNumber;
@@ -413,7 +431,7 @@ export default {
                 pageSize:this.page.pageSize
             };
             if(this.searchData.keyword!="")postData.user_name=Util.trim(this.searchData.keyword);
-
+            if(this.searchData.type!="")postData.authentication_status=Util.trim(this.searchData.type);
             $.ajax({
                 url: Config.apiRootPath+Config.api.user.real_name_authentication.list,
                 type: 'POST',
@@ -491,7 +509,6 @@ export default {
 
         },
         setProvince () {
-        	console.log('省')
             $.ajax({
                 url: Config.apiRootPath+Config.api.public.getProvince,
                 type: 'POST',
@@ -514,7 +531,6 @@ export default {
             });
         },
         setCity (provinceId,dataReset) {
-        	console.log('市')
             if(!provinceId)return;
             if(!dataReset){
                 this.currentData.merchantCityId="";
@@ -545,7 +561,6 @@ export default {
             });
         },
         setDistrict (cityId,dataReset) {
-        	console.log('区')
             if(!cityId)return;
             this.areaData.district=[];
             if(!dataReset){
@@ -652,11 +667,39 @@ export default {
             this.updateStatusForm.tableIndex=index;
             this.setCity(this.updateStatusForm.province_id,true);
             this.setDistrict(this.updateStatusForm.city_id,true);
-            this.updateStatus = true;
+            this.updateStatusForm.face={
+                                        url:this.updateStatusForm.front_image,
+                                        file:"",
+                                        fileObjName:"身份证正面照",
+                                        uploadMenu:"选择图片",
+                                        uploadType:"sync",
+                                        type:"image",
+                                        maxSize:2048
+                                    };
+            this.updateStatusForm.face2={
+                                        url:this.updateStatusForm.reverse_image,
+                                        file:"",
+                                        fileObjName:"身份证反面照",
+                                        uploadMenu:"选择图片",
+                                        uploadType:"sync",
+                                        type:"image",
+                                        maxSize:2048
+                                    };
+            this.updateStatusForm.face3={
+                                        url:this.updateStatusForm.image,
+                                        file:"",
+                                        fileObjName:"身份证手持照片",
+                                        uploadMenu:"选择图片",
+                                        uploadType:"sync",
+                                        type:"image",
+                                        maxSize:2048
+                                    };
+          this.updateStatus = true;
         },
         cancelUpdateStatus () {
             this.updateStatusForm={};
             this.updateStatus = false;
+            this.doType='list';
         },
         saveUpdateStatus () {
 
@@ -665,17 +708,35 @@ export default {
                 if(valid){
 
                     this.saveUpdateStatusLoading = true;
-                    let postData={
-                        ssid:Cookies.get('ssid'),
-                        id:this.updateStatusForm.id,
-                        authentication_status:this.updateStatusForm.is_authentication
+                    var formDataSe = new FormData();
+                    formDataSe.append("ssid", Cookies.get('ssid'));
+                    formDataSe.append("id", this.updateStatusForm.id);
+                    formDataSe.append("authentication_status",this.updateStatusForm.is_authentication);
+                    formDataSe.append("name", this.updateStatusForm.name);
+                    formDataSe.append("sex",this.updateStatusForm.sex);
+                    formDataSe.append("id_card", this.updateStatusForm.id_card);
+                    formDataSe.append("mobile",this.updateStatusForm.mobile);
+                    formDataSe.append("province_id", this.updateStatusForm.province_id);
+                    formDataSe.append("city_id", this.updateStatusForm.city_id);
+                    formDataSe.append("district_id", this.updateStatusForm.district_id);
+                    formDataSe.append("address",this.updateStatusForm.address);
+                    if(this.updateStatusForm.face.file){
+                        formDataSe.append("front_image", this.currentData.face.file);
                     };
-
+                    if(this.updateStatusForm.face2.file){
+                        formDataSe.append("reverse_image", this.currentData.face2.file);
+                    };
+                    if(this.updateStatusForm.face3.file){
+                        formDataSe.append("image", this.currentData.face3.file);
+                    };
                     $.ajax({
                         url: Config.apiRootPath+Config.api.user.real_name_authentication.authentication,
                         type: 'POST',
                         dataType: 'json',
-                        data: postData
+                        data: formDataSe,
+                        cache: false,  
+                        contentType: false,  
+                        processData: false 
                     })
                     .done((data)=>{
                         this.saveUpdateStatusLoading=false;
