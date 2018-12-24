@@ -1,12 +1,12 @@
 <style>
 </style>
-<!-- 商户红积分明细 -->
+<!-- 商户营业额明细 -->
 <template>
     <div class="doBox">
         <Spin size="large" fix v-if="switching"></Spin>
         <div class="ordler-list">
             <Row>
-                <Col span="11">
+                <Col span="10">
                     <div class="search-box">
                         <Form ref="searchData" :model="searchData" :rules="searchValidata" inline>
                             <FormItem prop="searchDate">
@@ -28,18 +28,18 @@
                         </Form>
                     </div>
                 </Col>
-                <Col span="13">
+                <Col span="14">
                     <div class="buttonGroup">
-                        <Button type="error">红积分</Button>
+                        <Button type="primary" @click="$emit('doWhat','userConsumeBonusesList')">红积分</Button>
                         <Button type="primary" @click="$emit('doWhat','userBuyIntegralList')">购物积分</Button>
                         <Button type="primary" @click="$emit('doWhat','userReturnIntegralList')">白积分</Button>
-                        <Button type="primary" @click="$emit('doWhat','turnoverList')">营业额</Button>
+                      	<Button type="error">营业额</Button>
                     </div>
                 </Col>
             </Row>
             <Table class="small_table" border :columns="columns" :loading="getLoading" :data="tableData"></Table>
             <div class="page-box">
-                <Page v-if="page.dataCount>10" :total="page.dataCount" show-total :current="page.pageNumber" :page-size-opts="page.pageSizeOpts" :page-size="page.pageSize" @on-change="changePage" @on-page-size-change="changePageSize" show-elevator placement="top" show-sizer></Page>
+                <Page v-if="page.dataCount>10" :total="page.dataCount" :current="page.pageNumber" show-total :page-size-opts="page.pageSizeOpts" :page-size="page.pageSize" @on-change="changePage" @on-page-size-change="changePageSize" show-elevator placement="top" show-sizer></Page>
             </div>
         </div>
     </div>
@@ -50,89 +50,77 @@ import Config from '../../../config/config';
 import Util from '../../../libs/util';
 import Cookies from 'js-cookie';
 
+
 export default {
-    name: 'ConsumeBonuses',
+    name: 'ReturnIntegral',
     props: ["param","publicData"],
     data () {
         return {
             columns: [
                 {
-                    title: '会员ID',
-         
+                    title: 'ID',
+                    width: 60,
                     align: 'center',
                     key: 'id'
                 },
                 {
-                    title: '商户名称',
-                  
+                    title: '用户名',
                     align: 'center',
                     key: 'merchant_name'
                 },
-                {
-                    title: '转账对方ID',
-                    align: 'center',
-                    key: 'destination_id'
-                },
-                {
-                    title: '转账对方名称',
-                    align: 'center',
-                    key: 'destination_name'
-                },
-               
+                // {
+                //     title: '已返金额',
+                //     key: 'share_yes',
+                //     align: 'right'
+                // },
+                // {
+                //     title: '未返金额',
+                //     align: 'right',
+                //     key: 'share_no'
+                // },
                 {
                     title: '金额',
                     align: 'right',
-                    key: 'amount'
+                    key: 'amount',
                 },
-
-                 {
-                    title: '创建时间',
-                    key: 'created',
-                    align: 'right'
-                },
-//              {
-//                  title: '期数',
-//                  align: 'right',
-//                  key: 'rank'
-//              },
-                {
-                    title: '服务费',
-                    align: 'right',
-                    key: 'service_charge'
-                },
-
-                {
-                    title: '积分种类',
-                    align: 'right',
-                    key: 'kind',
-                    render: (h, params) => {
-                        return h('span', {}, this.recordKind[params.row.kind]);
-                    }
-                },
-              
                 {
                     title: '状态',
                     align: 'center',
-                    width: 80,
-                    key: 'status',
+                    key: 'stauts',
                     render: (h, params) => {
 
                         return h('span', {}, this.recordType[params.row.status]);
                     }
                 },
                 {
-                    title: '来源（消费券）',
+                    title: '积分种类',
                     width: 130,
                     align: 'center',
-                    key: 'source_id'
+                    key: 'kind',
+                    render: (h, params) => {
+                        let tagcolor="default";
+                        let tagText="";
+                        return h('span', {}, this.recordKind[params.row.kind]);
+                    }
+                },
+                // {
+                //     title: '状态',
+                //     align: 'center',
+                //     width: 80,
+                //     key: 're_status'
+                // },
+                {
+                    title: '创建时间',
+                    width: 130,
+                    align: 'center',
+                    key: 'created'
                 }
             ],
             saveType: "new",
             recordType:["不限类型","转出","转入"],
-            recordKind:["----","白积分释放（转入）","转会员购物积分（转出）","转商家购物积分（转出","直营店消费（转出）"],
-
-            // 商户红积分种类 1-白积分释放（转入），2-转会员购物积分（转出），3-转商家购物积分（转出），4-直营店消费（转出）
-            doType:"userConsumeBonusesList",
+            recordKind:["----","订单返还（转入）","白积分转红积分万分之五（转出）"],
+            // 商户白积分种类 1-订单返还（转入）2-白积分转红积分万分之五（转出）
+            doType:"userReturnIntegralList",
             switching:false,
             tableData: [],
             page: {
@@ -162,15 +150,15 @@ export default {
     },
     methods: {
         //controller
-//      checkPower (dotype) {
-//          // return true;
-//          return !!this.$store.state.Rights[Config.api.user.user_settlement[dotype].MD5()];
-//      },
+        checkPower (dotype) {
+            // return true;
+            return !!this.$store.state.Rights[Config.api.merchant.merchant_settlement[dotype].MD5()];
+        },
         doWhat (dotype,dataIndex) {
-            // if(!this.checkPower(dotype)){
-            //     this.$Message.warning("对不起，您没有此操作权限！");
-            //     return;
-            // }
+            if(!this.checkPower(dotype)){
+                this.$Message.warning("对不起，您没有此操作权限！");
+                return;
+            }
             if(dotype==this.doType){
                 this.dataReady++;
                 this.init();

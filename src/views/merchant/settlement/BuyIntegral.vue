@@ -33,6 +33,7 @@
                         <Button type="primary" @click="$emit('doWhat','userConsumeBonusesList')">红积分</Button>
                         <Button type="error">购物积分</Button>
                         <Button type="primary" @click="$emit('doWhat','userReturnIntegralList')">白积分</Button>
+                        <Button type="primary" @click="$emit('doWhat','turnoverList')">营业额</Button>
                       
                     </div>
                 </Col>

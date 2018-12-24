@@ -213,7 +213,7 @@ export default {
                         //userTypeList
                         if(!!data){
                             if(data.code==0){
-                                //this.$emit("doWhat","list");
+                                this.$emit("doWhat","list");
                                 this.$Message.success("保存成功！");
                             }else{
                                 Config.showError({vm:this,data:data,

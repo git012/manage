@@ -113,11 +113,11 @@
                             <noUpFileInput :fileInfro="updateStatusForm.face3"></noUpFileInput>
                     </FormItem> 
                     <FormItem label="审核状态：" prop="is_authentication">
-                        <RadioGroup v-model="updateStatusForm.is_authentication">
-                            <Radio label="2">
+                        <RadioGroup v-model="updateStatusForm.authentication_status">
+                            <Radio :label="2">
                                 <span>拒绝</span>
                             </Radio>
-                            <Radio label="1">
+                            <Radio :label="1">
                                 <span>审核通过</span>
                             </Radio>
                         </RadioGroup>
@@ -588,79 +588,6 @@ export default {
                 }
             });
         },
-        //add && edit
-        saveEdit () {
-            if(!this.hasDataChange)return;
-            this.$refs['currentData'].validate((valid) => {
-
-                if (valid) {
-                    this.switching = true;
-
-                    var formData = new FormData();
-
-                    formData.append("ssid",                 Cookies.get('ssid'));
-                    formData.append("merchantType",         this.currentData.merchantType);
-                    formData.append("merchantBdMember",     this.currentData.merchantBDName);
-                    formData.append("userName",             this.currentData.userName);
-                    formData.append("merchantName",         this.currentData.merchantName);
-                    formData.append("merchantPhone",        this.currentData.merchantPhone);
-                    formData.append("merchantRatio",        this.currentData.merchantRatio);
-                    formData.append("merchantAddress",      this.currentData.merchantAddress);
-                    formData.append("applicantName",        this.currentData.applicantName);
-                    formData.append("applicantIdCard",      this.currentData.applicantIdCard);
-
-                    formData.append("merchantProvince",     this.currentData.merchantProvinceId);
-                    formData.append("merchantCity",         this.currentData.merchantCityId);
-                    formData.append("merchantDistrict",     this.currentData.merchantDistrictId);
-
-                    formData.append("userPassword",         this.currentData.userPassword||"");
-                    formData.append("userConfirmPassword",  this.currentData.userConfirmPassword||"");
-
-                    let requestUrl=Config.apiRootPath+Config.api.user.real_name_authentication.add;
-                    
-                    if(this.doType=="edit"){
-                        formData.append("merchantId", this.currentData.merchantId);
-                        requestUrl=Config.apiRootPath+Config.api.user.real_name_authentication.edit;
-                    };
-
-                    let _this=this;
-                    //拉取用户类型
-                    $.ajax({
-                        url: requestUrl,
-                        type: 'POST',
-                        dataType: 'json',
-                        data: formData,   
-                        cache: false,  
-                        contentType: false,  
-                        processData: false 
-                    })
-                    .done((data)=>{
-                        this.switching=false;
-                        //userTypeList
-                        if(!!data){
-                            if(data.code==0){
-                                if(this.doType=="add")this.doWhat("list");
-                                this.$Message.success("账户保存成功！");
-                            }else{
-                                Config.showError({vm:this,data:data,
-                                    errorMsg:""
-                                });
-                            }
-                        }else{
-                            Config.showError({vm:this,data:data,
-                                errorMsg:"请求失败"
-                            });
-                        }
-                    })
-                    .fail((xhr,status,error)=>{
-                        this.switching=false;
-                        Config.showError({vm:this,data:data,
-                            errorMsg:"服务器通讯失败"
-                        });
-                    });
-                }
-            })
-        },
         //edit password
         changeStatus (index) {
             this.updateStatusForm=$.extend(true, {}, this.tableData[index]);
@@ -702,16 +629,14 @@ export default {
             this.doType='list';
         },
         saveUpdateStatus () {
-
-            this.$refs['updateStatusForm'].validate((valid) => {
-
-                if(valid){
-
+//          this.$refs['updateStatusForm'].validate((valid) => {
+//
+//              if(valid){
                     this.saveUpdateStatusLoading = true;
                     var formDataSe = new FormData();
                     formDataSe.append("ssid", Cookies.get('ssid'));
                     formDataSe.append("id", this.updateStatusForm.id);
-                    formDataSe.append("authentication_status",this.updateStatusForm.is_authentication);
+                    formDataSe.append("authentication_status",this.updateStatusForm.authentication_status);
                     formDataSe.append("name", this.updateStatusForm.name);
                     formDataSe.append("sex",this.updateStatusForm.sex);
                     formDataSe.append("id_card", this.updateStatusForm.id_card);
@@ -721,13 +646,13 @@ export default {
                     formDataSe.append("district_id", this.updateStatusForm.district_id);
                     formDataSe.append("address",this.updateStatusForm.address);
                     if(this.updateStatusForm.face.file){
-                        formDataSe.append("front_image", this.currentData.face.file);
+                        formDataSe.append("front_image", this.updateStatusForm.face.file);
                     };
                     if(this.updateStatusForm.face2.file){
-                        formDataSe.append("reverse_image", this.currentData.face2.file);
+                        formDataSe.append("reverse_image", this.updateStatusForm.face2.file);
                     };
                     if(this.updateStatusForm.face3.file){
-                        formDataSe.append("image", this.currentData.face3.file);
+                        formDataSe.append("image", this.updateStatusForm.face3.file);
                     };
                     $.ajax({
                         url: Config.apiRootPath+Config.api.user.real_name_authentication.authentication,
@@ -766,9 +691,9 @@ export default {
                         });
                     });
 
-                } 
-
-            })
+//              } 
+//
+//          })
 
 
             

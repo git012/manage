@@ -109,12 +109,12 @@ export default {
                         return h('span', {}, this.recordIdentity[params.row.identity]);
                     }
                 },
-                {
-                    title: '会员名称',
-                    align: 'center',
-                    width: 80,
-                    key: 'member_name'
-                },
+//              {
+//                  title: '会员名称',
+//                  align: 'center',
+//                  width: 80,
+//                  key: 'member_name'
+//              },
                 {
                     title: '目标名称',
                     width: 130,

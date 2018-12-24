@@ -81,6 +81,7 @@ import AgentBonuses from './settlement/AgentBonuses.vue';
 import BuyIntegral from './settlement/BuyIntegral.vue';
 import CashAccount from './settlement/CashAccount.vue';
 import ReturnIntegral from './settlement/ReturnIntegral.vue';
+import turnover from './settlement/turnoverList.vue';//营业额明细
 import Recharge from './settlement/Recharge.vue';
 import PreRecharge from './settlement/PreRecharge.vue';
 import ConsumeBonusesForPreRecharge from './settlement/ConsumeBonusesForPreRecharge.vue';
@@ -95,6 +96,7 @@ export default {
         BuyIntegral : BuyIntegral,
         Recharge : Recharge,
         ReturnIntegral : ReturnIntegral,
+        turnover:turnover,
         CashAccount : CashAccount,
         AgentBonuses : AgentBonuses,
         PreRecharge : PreRecharge,
@@ -177,7 +179,7 @@ export default {
                 {
                     title: '订单',
                     // width: "5%",
-                    align: 'right',
+                    align: 'center',
                     key: 'orderSuccessCount'
                 },
                 // {
@@ -187,22 +189,22 @@ export default {
                 // },
                 {
                     title: '总金额',
-                    align: 'right',
+                    align: 'center',
                     key: 'merchantTotalCash'
                 },
                 {
                     title: '购物积分',
-                    align: 'right',
+                    align: 'center',
                     key: 'merchantShoppingScore'
                 },
                 {
                     title: '白积分',
-                    align: 'right',
+                    align: 'center',
                     key: 'merchantWhiteScore'
                 },
                 {
-                    title: '红分红',
-                    align: 'right',
+                    title: '红积分',
+                    align: 'center',
                     key: 'merchantRedScore'
                 },
                 {
@@ -376,6 +378,8 @@ export default {
                     dotype="userBuyIntegralList";
                 }else if(this.checkPower("userReturnIntegralList")){
                     dotype="userReturnIntegralList";
+                }else{
+                	dotype="turnoverList";
                 }
             };
 
@@ -387,6 +391,7 @@ export default {
             }
             this.switching=true;
             if(dotype=="userConsumeBonusesList"){//红积分
+            	console.log(666,dataIndex,this.tableData[dataIndex])
                 console.log(this.tableData[dataIndex]);
                 if(dataIndex>=0)this.paramData=this.tableData[dataIndex];
                 this.currentView="ConsumeBonuses";
@@ -396,6 +401,11 @@ export default {
                 if(dataIndex>=0)this.paramData=this.tableData[dataIndex];
                 this.currentView="BuyIntegral";
                 this.doType="userBuyIntegralList";
+            };
+            if(dotype=="turnoverList"){
+                if(dataIndex>=0)this.paramData=this.tableData[dataIndex];
+                this.currentView="turnover";
+                this.doType="turnoverList";
             };
             if(dotype=="userReturnIntegralList"){
                 if(dataIndex>=0)this.paramData=this.tableData[dataIndex];

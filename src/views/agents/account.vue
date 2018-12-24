@@ -126,7 +126,8 @@ export default {
                     key: 'id'
                 },
                 {
-                    title: '代理名称',
+                    title: '来源名称',
+                    align: 'center',
                     key: 'agent_name'
                 },
                 {
@@ -150,10 +151,25 @@ export default {
                         return h('span', {}, this.publicData.userTypeData[params.row.type]);
                     }
                 },
+//              {
+//                  title: '分润积分总额',
+//                  align: 'right',
+//                  key: 'agent_score'
+//              },
                 {
-                    title: '分润积分总额',
-                    align: 'right',
-                    key: 'agent_score'
+                    title: '红积分总额',
+                    align: 'center',
+                    key: 'red_score'
+                },
+                {
+                    title: '白积分总额',
+                    align: 'center',
+                    key: 'white_score'
+                },
+                {
+                    title: '购物积分总额',
+                    align: 'center',
+                    key: 'shopping_score'
                 },
                 {
                     title: '操作',

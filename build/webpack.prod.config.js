@@ -12,10 +12,10 @@ fs.open('./src/config/env.js', 'w', function (err, fd) {
 
 module.exports = merge(webpackBaseConfig, {
     output: {
-        // 生产
-        publicPath: 'http://manage.yugoubao.net/iview/',
+        // 正式
+//      publicPath: 'http://manage.yugoubao.net/iview/',
         // 测试
-//      publicPath: 'http://tmanage.yugoubao.net/iview/',
+        publicPath: 'http://tmanage.yugoubao.net/iview/',
         filename: '[name].js?v=[hash]',
         chunkFilename: '[name].chunk.js?v=[hash]'
     },

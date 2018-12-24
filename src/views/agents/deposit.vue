@@ -138,7 +138,11 @@
                     align: 'center',
                     key: 'member_name',
                 },
-               
+                 {
+                    title: '股东名称(认证)',
+                    align: 'center',
+                    key: 'authentication_name',
+                },
                 {
                     title: '申请时间',
                     align: 'center',
