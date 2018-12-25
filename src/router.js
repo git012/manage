@@ -305,7 +305,7 @@ export const appRouter = [
                 path: 'account',
                 icon: 'clipboard',
                 name: 'account',
-                title: '结算中心',
+                title: '商户结算中心',
                 mixedRights: false,
                 access: 1,
                 component: resolve => {

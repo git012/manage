@@ -451,6 +451,21 @@ export default {
                     }
                 },
                 {
+                    title: '是否具有权益',
+                    key: 'is_equities',
+                    align: 'center',
+                    render: (h, params) => {
+                        let tagcolor="default";
+                        let tagText="";
+                        if(params.row.is_equities=='0'){
+                        	tagText="否";
+                        }else{
+                        	tagText="是";
+                        }
+                        return h('span',tagText);
+                    }
+                },
+                {
                     title: '操作',
                     key: 'action',
                     width: 360,

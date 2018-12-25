@@ -120,7 +120,7 @@ export default {
             recordType:["不限类型","转出","转入"],
             recordKind:["----","订单返还（转入）","白积分转红积分万分之五（转出）"],
             // 商户白积分种类 1-订单返还（转入）2-白积分转红积分万分之五（转出）
-            doType:"userReturnIntegralList",
+            doType:"turnoverList",
             switching:false,
             tableData: [],
             page: {
