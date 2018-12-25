@@ -58,62 +58,36 @@ export default {
         return {
             columns: [
                 {
-                    title: 'ID',
-                    width: 60,
+                    title: '时间',
                     align: 'center',
-                    key: 'id'
+                    key: 'date_added'
                 },
-                {
-                    title: '用户名',
-                    align: 'center',
-                    key: 'merchant_name'
-                },
-                // {
-                //     title: '已返金额',
-                //     key: 'share_yes',
-                //     align: 'right'
-                // },
-                // {
-                //     title: '未返金额',
-                //     align: 'right',
-                //     key: 'share_no'
-                // },
                 {
                     title: '金额',
-                    align: 'right',
-                    key: 'amount',
+                    align: 'center',
+                    key: 'total'
                 },
                 {
-                    title: '状态',
+                    title: '类型',
                     align: 'center',
-                    key: 'stauts',
                     render: (h, params) => {
 
-                        return h('span', {}, this.recordType[params.row.status]);
+                        return h('span','转出');
                     }
+                },
+                {
+                    title: '目标名称',
+                    align: 'center',
+                    key: 'merchant_connection_name',
                 },
                 {
                     title: '积分种类',
-                    width: 130,
                     align: 'center',
-                    key: 'kind',
                     render: (h, params) => {
                         let tagcolor="default";
-                        let tagText="";
-                        return h('span', {}, this.recordKind[params.row.kind]);
+                        let tagText="提现";
+                        return h('span',tagText);
                     }
-                },
-                // {
-                //     title: '状态',
-                //     align: 'center',
-                //     width: 80,
-                //     key: 're_status'
-                // },
-                {
-                    title: '创建时间',
-                    width: 130,
-                    align: 'center',
-                    key: 'created'
                 }
             ],
             saveType: "new",

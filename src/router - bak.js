@@ -5,7 +5,7 @@ export const loginRouter = {
     path: '/login',
     name: 'login',
     meta: {
-        title: '登录-预购宝管理平台'
+        title: '登录-悟空团管理平台'
     },
     component: resolve => {
         require(['./views/login.vue'], resolve);
@@ -16,7 +16,7 @@ export const register = {
     path: '/register',
     name: 'register',
     meta: {
-        title: '商户注册-预购宝管理平台'
+        title: '商户注册-悟空团管理平台'
     },
     component: resolve => {
         require(['./views/register/register.vue'], resolve);
