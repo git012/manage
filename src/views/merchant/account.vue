@@ -350,7 +350,7 @@ export default {
             if (this.doType=="userRechargeList")        return "用户结算对账 - 充值 - " + this.paramData.name;
             if (this.doType=="userCashAccountList")     return "用户结算对账 - 预存款账户 - " + this.paramData.name;
             if (this.doType=="userPreRechargeList")     return "用户结算对账 - 预购充值 - " + this.paramData.name;
-            if (this.doType=="turnoverList")     		return "用户结算对账 - 营业额(出) - " + this.paramData.merchantName;
+            if (this.doType=="turnoverList")     		return "用户结算对账 - 营业额 - " + this.paramData.merchantName;
             if (this.doType=="userConsumeBonusesForPreRechargeList")return "用户结算对账 - 预购充值 - " + this.paramData.name + " - 消费增值积分";
             if (this.doType=="userBuyIntegralForPreRechargeList")   return "用户结算对账 - 预购充值 - " + this.paramData.name + " - 购物积分";
             if (this.doType=="userReturnIntegralForPreRechargeList")return "用户结算对账 - 预购充值 - " + this.paramData.name + " - 全返积分";

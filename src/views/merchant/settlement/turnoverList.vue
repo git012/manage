@@ -4,7 +4,7 @@
 <template>
     <div class="doBox">
         <Spin size="large" fix v-if="switching"></Spin>
-        <div class="ordler-list">
+        <div class="ordler-list" v-if="this.doType == 'turnoverList'">
             <Row>
                 <Col span="10">
                     <div class="search-box">
@@ -57,6 +57,11 @@ export default {
     data () {
         return {
             columns: [
+                {
+                    title: 'ID',
+                    align: 'center',
+                    key: 'id'
+                },
                 {
                     title: '时间',
                     align: 'center',
