@@ -81,7 +81,8 @@ import AgentBonuses from './settlement/AgentBonuses.vue';
 import BuyIntegral from './settlement/BuyIntegral.vue';
 import CashAccount from './settlement/CashAccount.vue';
 import ReturnIntegral from './settlement/ReturnIntegral.vue';
-import turnover from './settlement/turnoverList.vue';//营业额明细
+import turnover from './settlement/turnoverList.vue';//营业额明细(出账)
+import turnoverGet from './settlement/turnoverListGet.vue';//营业额明细(入账)
 import Recharge from './settlement/Recharge.vue';
 import PreRecharge from './settlement/PreRecharge.vue';
 import ConsumeBonusesForPreRecharge from './settlement/ConsumeBonusesForPreRecharge.vue';
@@ -97,6 +98,7 @@ export default {
         Recharge : Recharge,
         ReturnIntegral : ReturnIntegral,
         turnover:turnover,
+        turnoverGet:turnoverGet,
         CashAccount : CashAccount,
         AgentBonuses : AgentBonuses,
         PreRecharge : PreRecharge,
@@ -371,7 +373,6 @@ export default {
         // "userReturnIntegralList"    : "wkmanager/score/merchant_white_score",//白积分
         doWhat (dotype,dataIndex) {
             // let dotype=dotype;
-            console.log(this.tableData[dataIndex]);
             if(dotype=="userAccountList"){
                 if(this.checkPower("userConsumeBonusesList")){
                     dotype="userConsumeBonusesList";
@@ -381,6 +382,8 @@ export default {
                     dotype="userReturnIntegralList";
                 }else if(this.checkPower("turnoverList")){
                 	dotype="turnoverList";
+                }else if(this.checkPower("turnoverListGet")){
+                	dotype="turnoverListGet";
                 }
             };
 
@@ -392,7 +395,6 @@ export default {
             }
             this.switching=true;
             if(dotype=="userConsumeBonusesList"){//红积分
-            	console.log(666,dataIndex,this.tableData[dataIndex])
                 if(dataIndex>=0)this.paramData=this.tableData[dataIndex];
                 this.currentView="ConsumeBonuses";
                 this.doType="userConsumeBonusesList";
@@ -406,6 +408,11 @@ export default {
                 if(dataIndex>=0)this.paramData=this.tableData[dataIndex];
                 this.currentView="turnover";
                 this.doType="turnoverList";
+            };
+            if(dotype=="turnoverListGet"){
+                if(dataIndex>=0)this.paramData=this.tableData[dataIndex];
+                this.currentView="turnoverGet";
+                this.doType="turnoverListGet";
             };
             if(dotype=="userReturnIntegralList"){
                 if(dataIndex>=0)this.paramData=this.tableData[dataIndex];

@@ -312,7 +312,8 @@ let config = {
                 "userBuyIntegralList"       : "wkmanager/score/merchant_shopping_score",//购物积分
                 "userReturnIntegralList"    : "wkmanager/score/merchant_white_score",//白积分
                 "account_list":"wkmanager/merchant/lists",
-                "turnoverList":"wkmanager/merchant/withdrawCashlists",//营业款账户
+                "turnoverList":"wkmanager/merchant/withdrawCashlists",//营业款账户(出)
+                "turnoverListGet":"wkmanager/merchant/recordLists",//营业款账户(入)
             },
             // ,
             // //商户积分分发

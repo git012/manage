@@ -1,10 +1,10 @@
 <style>
 </style>
-<!-- 商户营业额明细 -->
+<!-- 商户营业额明细入账 -->
 <template>
     <div class="doBox">
         <Spin size="large" fix v-if="switching"></Spin>
-        <div class="ordler-list" v-if="this.doType == 'turnoverList'">
+        <div class="ordler-list" v-if="this.doType == 'turnoverListGet'">
             <Row>
                 <Col span="10">
                     <div class="search-box">
@@ -38,11 +38,11 @@
                 </Col>
                 <Col span="14" style="margin: 10px 0px;">
                     <div class="buttonGroup">
-                      	<Button type="warning"  @click="$emit('doWhat','turnoverListGet')" class="add-btu margin-right-10" size="small">查看入账明细</Button>
+                      	<Button type="warning"  @click="$emit('doWhat','turnoverList')" class="add-btu margin-right-10" size="small">查看出账明细</Button>
                     </div>
                 </Col>
 				<Col span="24" style="margin-bottom: 20px;text-align: center;">
-                    <div style="font-weight: bold; font-size: 16px;">营业额  —— 出账明细</div>
+                    <div style="font-weight: bold; font-size: 16px;">营业额  —— 入账明细</div>
                 </Col>
             </Row>
             <Table class="small_table" border :columns="columns" :loading="getLoading" :data="tableData"></Table>
@@ -66,7 +66,7 @@ export default {
         return {
             columns: [
                 {
-                    title: 'ID',
+                    title: '来源(订单Id)',
                     align: 'center',
                     key: 'id'
                 },
@@ -85,20 +85,20 @@ export default {
                     align: 'center',
                     render: (h, params) => {
 
-                        return h('span','转出');
+                        return h('span','转入');
                     }
                 },
                 {
-                    title: '目标名称',
+                    title: '名称',
                     align: 'center',
-                    key: 'merchant_connection_name',
+                    key: 'name',
                 },
                 {
                     title: '积分种类',
                     align: 'center',
                     render: (h, params) => {
                         let tagcolor="default";
-                        let tagText="提现";
+                        let tagText="订单";
                         return h('span',tagText);
                     }
                 }
@@ -107,7 +107,7 @@ export default {
             recordType:["不限类型","转出","转入"],
             recordKind:["----","订单返还（转入）","白积分转红积分万分之五（转出）"],
             // 商户白积分种类 1-订单返还（转入）2-白积分转红积分万分之五（转出）
-            doType:"turnoverList",
+            doType:"turnoverListGet",
             switching:false,
             tableData: [],
             page: {
