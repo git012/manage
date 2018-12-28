@@ -1,9 +1,9 @@
 ﻿import Env from './env';
 import Md5 from '../libs/md5';
 // 测试环境
-//     const server_route = "http://tapi.yugoubao.net/index.php?s=";
+       const server_route = "http://tapi.yugoubao.net/index.php?s=";
 //正式环境
-const server_route = "https://wktapi.yugoubao.net/index.php?s=";
+//const server_route = "https://wktapi.yugoubao.net/index.php?s=";
 const powerList = {};
 let config = {
     powerList:powerList,

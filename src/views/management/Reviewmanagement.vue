@@ -20,8 +20,33 @@
             <div class="doBox">
                 <Spin size="large" fix v-if="switching"></Spin>
                 <div class="ordler-list" v-if="doType=='list'">
-
-                    <Button type="primary" :loading="loadBut" style="margin: 10px 0 10px" @click="batchOperation()" >批量操作</Button>
+                <Row>
+                <Col span="11">
+                    <div class="search-box">
+                        <Form ref="searchData" :model="searchData" inline>
+                        	<FormItem prop="keyword">
+                                <Input type="text" v-model="searchData.keyword" placeholder="输入名称或者帐号搜索商户">
+                                    <Icon type="ios-eye" slot="prepend"></Icon>
+                                </Input>
+                            </FormItem>
+                            <!--<Select v-model="searchData.type" style="width:90px" placeholder="选择审核状态">
+                                <Option v-for="item,key in recordType" :value="key" :key="key">{{ item }}</Option>
+                            </Select>-->
+                            <FormItem>
+                                <ButtonGroup>
+                                    <Button type="primary" icon="search" @click="search()">搜索</Button>
+                                    <Button @click="resetSearch">清空</Button>
+                                </ButtonGroup>
+                            </FormItem>
+                        </Form>
+                    </div>
+                </Col>
+                <Col span="13">
+                    <div class="buttonGroup">
+ 							<Button type="primary" :loading="loadBut" style="margin: 10px 0 10px" @click="batchOperation()" >批量审核</Button>
+                    </div>
+                </Col>
+            </Row>
                     <Table class="small_table" border :columns="columns" :loading="getLoading" :data="tableData" @on-select="OnSelect" @on-select-all="allOnSelect" @on-selection-change="selectionchange"></Table>
 
                     <div class="page-box">
@@ -265,7 +290,7 @@
                     searchDate:[],
                     startDate:"",
                     endDate:"",
-                    type:0
+                    type:""
                 },
                 searchValidata: {}
             };
@@ -391,6 +416,7 @@
                     pageSize:this.page.pageSize
                 };
                 if(this.searchData.keyword!="")postData.search=Util.trim(this.searchData.keyword);
+                 if(this.searchData.type!="")postData.search=Util.trim(this.searchData.type);
                 if(this.searchData.startDate!="")postData.startDate=this.searchData.startDate;
                 if(this.searchData.shipStatus>=0)postData.status=this.searchData.shipStatus;
                 if(this.searchData.endDate!="")postData.endDate=this.searchData.endDate;
