@@ -303,13 +303,13 @@
             },
 
             OnSelect(event){
-                // console.log(event);
+                 console.log(event);
             },
             selectionchange(event){
-                // console.log(event);
+                 //console.log(event);
             },
             allOnSelect(event){
-                // console.log(event);
+                 console.log(event);
                 this.allSelect=event
             },
             //controller
