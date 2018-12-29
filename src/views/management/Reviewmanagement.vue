@@ -165,7 +165,6 @@
 
                     {
                         title: '状态',
-                        width: 80,
                         key: 'status',
                         // width: "100",
                         align: 'center',
@@ -174,18 +173,17 @@
                             let tagcolor="default";
                             let tagText="";
                             if(params.row.status==0){
-                                tagcolor="default";tagText="隐藏";
+                                tagcolor="#ff3300";tagText="隐藏";
                             };
                             if(params.row.status==1){
-                                tagcolor="green";tagText="显示";
+                                tagcolor="#00cc66";tagText="显示";
                             };
                             // if(params.row.status==2){
                             //     tagcolor="red";tagText="失败";
                             // };
                             return h('span', {
-                                props: {
-                                    color: tagcolor,
-                                    size: 'small'
+                                style: {
+                                    color: tagcolor
                                 }
                             }, tagText);
 
@@ -328,7 +326,7 @@
             },
 
             OnSelect(event){
-                 console.log(event);
+                 this.allSelect=event;
             },
             selectionchange(event){
                  //console.log(event);
@@ -472,6 +470,7 @@
 
             //批量操作
             batchOperation(){
+            	if(this.allSelect.length>0){
                 let postData=[];
                 let postDatas={};
                 for (var i=0;i<this.allSelect.length;i++){
@@ -511,6 +510,7 @@
                                 this.tableData=newListData;
                                 this.updateStatus = false;
                                 this.doWhat("list");
+                                this.allSelect={};
                             }else{
                                 Config.showError({vm:this,data:data,
                                     errorMsg:""
@@ -528,6 +528,9 @@
                             errorMsg:"服务器通讯失败"
                         });
                     });
+            	}else{
+            		  Config.showError({vm:this,errorMsg:"请先勾选要审核的评论！"});
+            	}
             },
             //edit password
             changeStatus (index) {
